@@ -14,7 +14,8 @@ type Props<T extends Route> = SceneRendererProps &
     lazyPreloadDistance: number;
     index: number;
     children: (props: { loading: boolean }) => React.ReactNode;
-    style?: StyleProp<ViewStyle>;
+    style?: StyleProp<ViewStyle>;   
+    isSwiping: boolean;
   };
 
 export default function SceneView<T extends Route>({
@@ -26,6 +27,7 @@ export default function SceneView<T extends Route>({
   lazyPreloadDistance,
   addEnterListener,
   style,
+  isSwiping
 }: Props<T>) {
   const [isLoading, setIsLoading] = React.useState(
     Math.abs(navigationState.index - index) > lazyPreloadDistance
@@ -86,6 +88,7 @@ export default function SceneView<T extends Route>({
           ? StyleSheet.absoluteFill
           : null,
         style,
+        focused || isSwiping? null: {height: 0},
       ]}
     >
       {

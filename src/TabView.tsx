@@ -58,13 +58,21 @@ export default function TabView<T extends Route>({
     height: 0,
     ...initialLayout,
   });
-
+  const [isSwiping, setIsSwiping] = React.useState(false);
   const jumpToIndex = (index: number) => {
     if (index !== navigationState.index) {
       onIndexChange(index);
     }
   };
+  const swipeStart = () => {
+    setIsSwiping(true);
+    onSwipeStart?.();
+  }
 
+  const swipeEnd = () => {
+    setIsSwiping(false);
+    onSwipeEnd?.();
+  }
   const handleLayout = (e: LayoutChangeEvent) => {
     const { height, width } = e.nativeEvent.layout;
 
@@ -84,8 +92,8 @@ export default function TabView<T extends Route>({
         navigationState={navigationState}
         keyboardDismissMode={keyboardDismissMode}
         swipeEnabled={swipeEnabled}
-        onSwipeStart={onSwipeStart}
-        onSwipeEnd={onSwipeEnd}
+        onSwipeStart={swipeStart}
+        onSwipeEnd={swipeEnd}
         onIndexChange={jumpToIndex}
         animationEnabled={animationEnabled}
         style={pagerStyle}
@@ -118,6 +126,7 @@ export default function TabView<T extends Route>({
                       lazyPreloadDistance={lazyPreloadDistance}
                       navigationState={navigationState}
                       style={sceneContainerStyle}
+                      isSwiping={isSwiping}
                     >
                       {({ loading }) =>
                         loading
